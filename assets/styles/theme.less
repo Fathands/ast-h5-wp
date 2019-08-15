@@ -1,0 +1,45 @@
+@import './assets/styles/variables.less';
+
+// 页面颜色
+@bg: #F3F4F6; // 页面主要背景
+@bg-light: #FBFBFB; // 内容区域内背景
+@border: #F0F0F0; // 列表分割线
+@border-dark: #E9E9E9; // 次要描边和输入框描边
+@border-darker: #E3E3E3; // 重要分割线
+@white: #FFF;
+@error-bg: #FFF7F7;
+
+// 文字颜色
+@text-gray: #6F6F6F;
+@text-silver: #AAA;
+@text-light: #CFCFCF;
+@text-red: #FF4646;
+@text-red-lighter: #ff5a60;
+@text-orange: #F56E1D;
+@go-icon-color: #D6D6D6;
+@text-darker: #333;
+@text-gary-title: #909090;
+
+// 使馆日历颜色
+@calendar-holiday: #f98483;
+@calendar-weekend: #7ec2f7;
+
+// icon图标颜色
+@icon-font-color: #66686c;
+/*********************************************自定义变量*************************************************/
+
+/*********************************************主题*************************************************/
+
+@theme-color: @primary;
+@tabbar-text-active-color: @primary;
+@dialog-button-text-primary-color: @primary;
+@checkbox-icon-color-checked: @primary;
+@check-icon-color-checked: @checkbox-icon-color-checked;
+@icon-success-color: @primary;
+@button-primary-bg-color: @primary;
+// @button-primary-active-bg-color: darken(@primary, 10%); // 在当前打包替换的逻辑下，不能使用这个函数，只能在浏览器调试的时候使用，使用之后取出这个函数执行完成之后的值，放回去
+// @button-primary-disabled-bg-color: lighten(@primary, 20%); // 在当前打包替换的逻辑下，不能使用这个函数，只能在浏览器调试的时候使用，使用之后取出这个函数执行完成之后的值，放回去
+@button-primary-active-bg-color: @primary-less-darken-10-percent;
+@button-primary-disabled-bg-color: @primary-less-lighten-20-percent;
+@button-warn-active-color: @white;
+/*********************************************主题*************************************************/

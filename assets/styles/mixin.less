@@ -1,0 +1,155 @@
+@import './assets/styles/theme.less';
+// @import '~vux/src/styles/1px.less';
+
+// 1px分割线
+// 上方
+.line-1px-t(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setTopLine(@color);
+  }
+}
+
+// 左方
+.line-1px-l(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setLeftLine(@color);
+  }
+}
+
+// 右方
+.line-1px-r(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setRightLine(@color);
+  }
+}
+
+// 下方
+.line-1px-b(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setBottomLine(@color);
+  }
+}
+
+// 全边框
+.line-1px(@color: @border, @raius: .12rem) {
+  position: relative;
+
+  &::before {
+    border-radius: @raius;
+    .setLine(@color);
+  }
+}
+
+// 清除分割线
+.line-1px-clear() {
+  &::before {
+    display: none;
+  }
+}
+
+.bold-text() {
+  font-weight: 600;
+}
+
+.setBottomDashedLine(@c: @border) {
+  content: " ";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  border-bottom: 1px dashed @c;
+  color: @c;
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+
+.setTopDashedLine(@c: @border) {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-bottom: 1px dashed @c;
+  color: @c;
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+
+.setRightDashedLine(@c: @border) {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 200%;
+  border-right: 1px dashed @c;
+  color: @c;
+  transform-origin: 0 0;
+  transform: scale(0.5);
+}
+
+// 下虚线
+.line-1px-dashed-b(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setBottomDashedLine(@border);
+  }
+}
+
+// 上虚线
+.line-1px-dashed-t(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setTopDashedLine(@border);
+  }
+}
+
+// 右虚线
+.line-1px-dashed-r(@color: @border) {
+  position: relative;
+
+  &::before {
+    .setRightDashedLine(@border);
+  }
+}
+
+// 通用按钮
+.common-btn(@width: auto, @height: .9rem, @radius: .06rem, @size: .32rem) {
+  padding: 0;
+  width: @width;
+  height: @height;
+  line-height: @height;
+  border-radius: @radius;
+  font-size: @size;
+
+  &.weui-btn_plain-primary {
+    border-color: @primary;
+    color: @primary;
+    line-height: @height - 0.02;
+    background-color: white;
+    &:active {
+      border-color: @primary-less-lighten-10-percent;
+      color: @primary-less-lighten-10-percent;
+    }
+    &.weui-btn_disabled {
+      opacity: .3;
+    }
+  }
+}
+
+.overflow-dot() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
