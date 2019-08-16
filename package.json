@@ -18,6 +18,9 @@
   "homepage": "https://github.com/Fathands/ast-h5-wp#readme",
   "dependencies": {
     "autoprefixer": "^9.6.1",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelon": "^1.0.5",
     "circular-json": "^0.5.9",
     "less": "2.7.1",
     "postcss": "^7.0.17",
