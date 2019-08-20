@@ -239,6 +239,7 @@ export default {
         service: false,
       },
       score: this.getScore(),
+      show: true,
       procedureList: [
         {
           title: '拒签退全款',
@@ -273,10 +274,19 @@ export default {
       ],
     };
   },
+  created() {
+    this.init()
+  },
+  mounted() {
+    this.ready('passport')
+  },
+  destroyed() {
+    this.destroyed()
+  },
   methods: {
     parseInt,
     openDialog(switchName, open) {
-      this.popupSwitches[switchName] = open;
+      this.show = true
 
       const name = {
         priceDetail: '.price-detail-dialog',
@@ -287,14 +297,12 @@ export default {
       utils.disableMaskScrollBody(name[switchName]);
     },
     goBack() {
-      if (history.length > 2) {
-        history.go(-1);
-      } else {
-        this.$router.replace({
-          name: 'ProductList',
-          params: { countryId: this.product.visa_country_id },
-        });
-      }
+      this.$router.replace({
+        name: 'ProductList',
+        params: { countryId: this.product.visa_country_id},
+      });
+      
+      this.show = false;
     },
     getScore() {
       if (this.reviews && this.reviews !== 0) {
