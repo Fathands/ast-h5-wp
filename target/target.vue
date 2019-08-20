@@ -1,5 +1,5 @@
 <template>
-  <div id="base-info" v-bind:style="pdv.backgroundImage(backgrounImage)">
+  <div id="base-info">
     <img class="back-icon" src="../../../assets/imgs/order/back.png" @click="goBack" />
 
     <div class="goods-info">
@@ -121,64 +121,61 @@
       </div>
     </div>
 
-    <!-- 各种浮层 -->
-    <div v-transfer-dom>
-      <!-- 办理时长浮层 need-days-dialog 下面有用到-->
-      <x-dialog class="common-dialog need-days-dialog" v-model="popupSwitches.needDays">
-        <div class="dialog-header">办理时长</div>
-        <div class="dialog-content">
-          <div class="days">
-            <span
-              v-if="product.need_days !== product.need_days_longest"
-            >{{product.need_days}}-{{product.need_days_longest}}</span>
-            <span v-if="product.need_days === product.need_days_longest">{{product.need_days}}</span>
-            工作日
-          </div>
-          <div class="detail">{{product.need_days_detail}}</div>
+    <!-- 办理时长浮层 need-days-dialog 下面有用到-->
+    <x-dialog class="common-dialog need-days-dialog" v-model="popupSwitches.needDays">
+      <div class="dialog-header">办理时长</div>
+      <div class="dialog-content">
+        <div class="days">
+          <span
+            v-if="product.need_days !== product.need_days_longest"
+          >{{product.need_days}}-{{product.need_days_longest}}</span>
+          <span v-if="product.need_days === product.need_days_longest">{{product.need_days}}</span>
+          工作日
         </div>
-        <div class="dialog-close" @click="openDialog('needDays', false)">知道了</div>
-      </x-dialog>
+        <div class="detail">{{product.need_days_detail}}</div>
+      </div>
+      <div class="dialog-close" @click="openDialog('needDays', false)">知道了</div>
+    </x-dialog>
 
-      <!-- 费用明细浮层 price-detail-dialog 下面有用到 -->
-      <x-dialog class="common-dialog price-detail-dialog" v-model="popupSwitches.priceDetail">
-        <div class="dialog-header">费用明细</div>
-        <div class="dialog-content">
-          <div class="days" v-if="product.company_coupon && product.company_coupon.coupon_desc">
-            ￥{{product.company_coupon.sell_price / 100}}
-            <span
-              class="origin"
-            >￥{{product.sell_price / 100}}</span>
-          </div>
-          <div
-            class="days"
-            v-else-if="product.distributor_discount && product.distributor_discount.desc"
-          >
-            ￥{{product.distributor_discount.price / 100}}
-            <span
-              class="origin"
-            >￥{{product.sell_price / 100}}</span>
-          </div>
-          <div class="days" v-else>￥{{product.sell_price / 100}}</div>
-          <div class="detail">{{product.price_detail}}</div>
+    <!-- 费用明细浮层 price-detail-dialog 下面有用到 -->
+    <x-dialog class="common-dialog price-detail-dialog" v-model="popupSwitches.priceDetail">
+      <div class="dialog-header">费用明细</div>
+      <div class="dialog-content">
+        <div class="days" v-if="product.company_coupon && product.company_coupon.coupon_desc">
+          ￥{{product.company_coupon.sell_price / 100}}
+          <span
+            class="origin"
+          >￥{{product.sell_price / 100}}</span>
         </div>
-        <div class="dialog-close" @click="openDialog('priceDetail', false)">知道了</div>
-      </x-dialog>
+        <div
+          class="days"
+          v-else-if="product.distributor_discount && product.distributor_discount.desc"
+        >
+          ￥{{product.distributor_discount.price / 100}}
+          <span
+            class="origin"
+          >￥{{product.sell_price / 100}}</span>
+        </div>
+        <div class="days" v-else>￥{{product.sell_price / 100}}</div>
+        <div class="detail">{{product.price_detail}}</div>
+      </div>
+      <div class="dialog-close" @click="openDialog('priceDetail', false)">知道了</div>
+    </x-dialog>
 
-      <!-- 服务特色 -->
-      <x-dialog class="common-dialog service-dialog" v-model="popupSwitches.service">
-        <div class="dialog-header">服务特色</div>
-        <div class="dialog-content">
-          <div class="serve-item" v-for="(item, idx) in procedureList" :key="idx">
-            <img :src="item.icon" class="icon" />
-            <div class="content" @click="goDesc(idx)">
-              <div class="title">{{item.title}}</div>
-              <div class="desc">{{item.desc}}</div>
-            </div>
+    <!-- 服务特色 -->
+    <x-dialog class="common-dialog service-dialog" v-model="popupSwitches.service">
+      <div class="dialog-header">服务特色</div>
+      <div class="dialog-content">
+        <div class="serve-item" v-for="(item, idx) in procedureList" :key="idx">
+          <img :src="item.icon" class="icon" />
+          <div class="content" @click="goDesc(idx)">
+            <div class="title">{{item.title}}</div>
+            <div class="desc">{{item.desc}}</div>
           </div>
         </div>
-        <div class="dialog-close" @click="openDialog('service', false)">知道了</div>
-      </x-dialog>
-    </div>
+      </div>
+      <div class="dialog-close" @click="openDialog('service', false)">知道了</div>
+    </x-dialog>
   </div>
 </template>
 
