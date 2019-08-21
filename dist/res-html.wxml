@@ -1,0 +1,41 @@
+<view id="base-info">
+<image class="back-icon" src="../../../assets/imgs/order/back.png" @click="goBack"></image>
+
+<view class="goods-info"></view>
+
+<!--  办理时长浮层 need-days-dialog 下面有用到 -->
+
+<x-dialog class="common-dialog need-days-dialog" v-model="popupSwitches.needDays"></x-dialog>
+
+<!--  费用明细浮层 price-detail-dialog 下面有用到  -->
+
+<x-dialog class="common-dialog price-detail-dialog" v-model="popupSwitches.priceDetail"></x-dialog>
+
+<!--  服务特色  -->
+
+<x-dialog class="common-dialog service-dialog" v-model="popupSwitches.service">
+<view class="dialog-header">
+服务特色
+</view>
+
+<view class="dialog-content">
+<view class="serve-item" v-for="(item, idx) in procedureList" :key="idx">
+<image :src="item.icon" class="icon"></image>
+
+<view class="content" @click="goDesc(idx)">
+<view class="title">
+{{item.title}}
+</view>
+
+<view class="desc">
+{{item.desc}}
+</view>
+</view>
+</view>
+</view>
+
+<view class="dialog-close" @click="openDialog('service', false)">
+知道了
+</view>
+</x-dialog>
+</view>
