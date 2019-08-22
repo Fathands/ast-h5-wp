@@ -1,1 +1,427 @@
-#base-info{background-size:100%;background-repeat:no-repeat;width:100%;color:#fff;font-size:40rpx;padding-top:75rpx;padding-bottom:20rpx}#base-info .back-icon{width:48rpx;height:48rpx;position:absolute;left:20rpx;top:15rpx}#base-info .goods-info{padding:0 24rpx}#base-info .product-name{font-size:40rpx;line-height:44rpx;-webkit-line-clamp:2;display:-webkit-box;overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical}#base-info .product-name p{text-align:center;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:60rpx;height:120rpx}#base-info .tags-box{display:flex;flex-wrap:wrap;margin-top:11rpx;transform:translateX(-12rpx)}#base-info .tags-box .tag-item{font-size:22rpx;background-color:rgba(0,0,0,.1);padding:7rpx 13rpx;margin-top:12rpx;margin-left:12rpx}#base-info .features{text-align:center;margin:auto;display:flex;justify-content:center;align-items:center;font-size:22rpx;margin-top:49rpx}#base-info .features .feature-item{flex:1;display:flex;flex-direction:row;align-items:center}#base-info .features .item-title{color:rgba(255,255,255,.6);margin-right:5rpx}#base-info .features span{color:#fff}#base-info .info-card{background-color:#fff;box-shadow:0rpx 8rpx 32rpx 0rpx rgba(0,0,0,.08);border-radius:16rpx;margin-top:26rpx;overflow:hidden}#base-info .info-card .card-title{background-color:#fff9ec;display:flex;flex-direction:row;height:80rpx;align-items:center;padding-left:68rpx;background-image:url(../../../assets/imgs/product/2.3.0/warn.png);background-repeat:no-repeat;background-position:24rpx center;background-size:32rpx 34rpx;position:relative}#base-info .info-card .card-title::after{content:"";background-image:url(../../../assets/imgs/product/2.3.0/question-mark.png);background-repeat:no-repeat;width:43rpx;height:43rpx;background-size:cover;position:absolute;top:50%;transform:translateY(-50%);right:24rpx}#base-info .info-card .card-title .type-item{font-size:24rpx;color:#333}#base-info .info-card .card-title .type-item+.type-item{margin-left:24rpx}#base-info .info-card .card-title .type-item .red-text{display:inline-block;margin-left:9rpx;margin-right:6rpx;color:#fc4d52}#base-info .info-card .card-content{padding:40rpx 24rpx}#base-info .price{padding:0 24rpx;width:100%;display:flex}#base-info .price .left{display:flex;color:#333;align-items:baseline;font-size:64rpx}#base-info .price .left .icon{font-size:36rpx;margin-right:4rpx;display:inline-block}#base-info .price .left .unit{font-size:32rpx;color:#999}#base-info .price .spec{align-self:flex-start;display:flex;align-items:center;background-image:url(../../../assets/imgs/product/2.3.0/spec.png);background-repeat:no-repeat;background-size:cover;transform:translateY(20rpx);border-top-right-radius:4rpx;border-bottom-right-radius:4rpx}#base-info .price .spec .company-coupon{font-size:20rpx;color:#fff;padding:10rpx 8rpx 10rpx 20rpx}#base-info .price .right{flex:1;display:flex;justify-content:flex-end;align-items:center}#base-info .price .right a{display:flex;justify-content:center;align-items:center;border-radius:24rpx;border:solid 2rpx #e0e0e0;font-size:24rpx;color:#333;padding:12rpx 16rpx}#base-info .origin-price{display:flex;align-items:center;font-size:28rpx;padding-left:45rpx;color:#aaa}#base-info .origin-price span{text-decoration:line-through}#base-info .rate-box{padding:0 24rpx 0 48rpx;display:flex;align-items:center;margin-top:30rpx;padding-top:40rpx;border-top:1px solid #f0f0f0}#base-info .rate-box .number-box{flex:1}#base-info .rate-box .number-box.star-box{display:flex;flex-direction:column;justify-content:center;align-items:center}#base-info .rate-box .number-box .numnber{font-size:32rpx;color:#333;font-weight:600}#base-info .rate-box .number-box .title{font-size:24rpx;color:#999;margin-top:20rpx}#base-info .rate-box .number-box .title.star-title{display:flex;align-items:center;margin-top:26rpx}#base-info .rate-box .number-box .title.star-title .icon-arrow_enter{color:#f6f6f6;font-weight:800;margin-left:6rpx;transform:translateY(2rpx)}#base-info .rate-box .number-box .title.star-title .icon-arrow_enter.go-icon{font-size:18rpx;color:#d6d6d6}#base-info .procedure-box{display:flex;flex-direction:column;background-color:snow;border-radius:16rpx;border:solid 1rpx #e22d3a;padding-top:16rpx;position:relative;margin-top:20rpx}#base-info .procedure-box .procedure-header{display:flex;justify-content:space-between;padding-left:8rpx}#base-info .procedure-box .procedure-header .left-box{width:247rpx;height:56rpx;background-image:url(../../../assets/imgs/product/2.3.0/procedure-header.png);background-size:cover;background-repeat:no-repeat;background-position:0 15rpx}#base-info .procedure-box .procedure-header .right-box{width:168rpx;height:56rpx;background-image:url(../../../assets/imgs/product/2.3.0/more-view.png);background-size:cover;background-repeat:no-repeat;position:absolute;right:-8rpx;top:16rpx;font-size:28rpx;color:#fff;padding-left:15rpx;padding-top:8rpx;display:flex;align-items:center;justify-content:center}#base-info .procedure-box .procedure-header .right-box .right-icon{width:10rpx;height:18rpx;background-size:cover;background-repeat:no-repeat}#base-info .procedure-box .procedure-header .right-box .right-icon.more{background-image:url(https://o.666visa.cn/static/pdvwxa/visa-detail/more-right-icon.png);margin-left:10rpx}#base-info .procedure-box .procedure-container{display:flex;flex-wrap:wrap;padding:23rpx 22rpx 45rpx}#base-info .procedure-box .procedure-container .procedure-item{width:218rpx;height:123rpx;display:flex;flex-direction:column;justify-content:center;align-items:center}#base-info .procedure-box .procedure-container .procedure-item image{margin:40rpx auto 15rpx;width:60rpx;height:60rpx}#base-info .procedure-box .procedure-container .procedure-item .procedure-text{font-size:24rpx;color:#666}.need-days-dialog .days{font-size:24rpx;color:#6f6f6f}.need-days-dialog .days span{font-size:48rpx;color:#e22d3a}.need-days-dialog .detail{font-size:28rpx;line-height:48rpx;margin-top:30rpx;color:#aaa}.price-detail-dialog .price-detail-dialog .weui-dialog{max-width:80%}.price-detail-dialog .days{font-size:48rpx;color:#ff4646}.price-detail-dialog .days span.origin{font-size:24rpx;color:#6f6f6f;text-decoration:line-through;margin-left:8rpx}.price-detail-dialog .detail{font-size:28rpx;line-height:48rpx;margin-top:30rpx;color:#aaa}.service-dialog .dialog-content{max-height:300px;overflow-y:auto;padding-bottom:0}.service-dialog .dialog-content .serve-item{display:flex;margin-bottom:50rpx}.service-dialog .dialog-content .serve-item .icon{width:40rpx;height:40rpx;margin-right:30rpx;transform:translateY(-6rpx)}.service-dialog .dialog-content .serve-item .content{display:flex;flex-direction:column;max-width:535rpx}.service-dialog .dialog-content .serve-item .content .title{font-size:32rpx;color:#333;text-align:left;font-weight:600;margin-bottom:20rpx}.service-dialog .dialog-content .serve-item .content .desc{font-size:28rpx;line-height:40rpx;color:#666;text-align:left}@media screen and (min-width:768px){.price-detail-dialog .weui-dialog{width:50%}}
+#base-info {
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 100%;
+  color: #fff;
+  font-size: 40rpx;
+  padding-top: 75rpx;
+  padding-bottom: 20rpx
+}
+
+#base-info .back-icon {
+  width: 48rpx;
+  height: 48rpx;
+  position: absolute;
+  left: 20rpx;
+  top: 15rpx
+}
+
+#base-info .goods-info {
+  padding: 0 24rpx
+}
+
+#base-info .product-name {
+  font-size: 40rpx;
+  line-height: 44rpx;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical
+}
+
+#base-info .product-name p {
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 60rpx;
+  height: 120rpx
+}
+
+#base-info .tags-box {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 11rpx;
+  transform: translateX(-12rpx)
+}
+
+#base-info .tags-box .tag-item {
+  font-size: 22rpx;
+  background-color: rgba(0, 0, 0, .1);
+  padding: 7rpx 13rpx;
+  margin-top: 12rpx;
+  margin-left: 12rpx
+}
+
+#base-info .features {
+  text-align: center;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22rpx;
+  margin-top: 49rpx
+}
+
+#base-info .features .feature-item {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center
+}
+
+#base-info .features .item-title {
+  color: rgba(255, 255, 255, .6);
+  margin-right: 5rpx
+}
+
+#base-info .features span {
+  color: #fff
+}
+
+#base-info .info-card {
+  background-color: #fff;
+  box-shadow: 0rpx 8rpx 32rpx 0rpx rgba(0, 0, 0, .08);
+  border-radius: 16rpx;
+  margin-top: 26rpx;
+  overflow: hidden
+}
+
+#base-info .info-card .card-title {
+  background-color: #fff9ec;
+  display: flex;
+  flex-direction: row;
+  height: 80rpx;
+  align-items: center;
+  padding-left: 68rpx;
+  background-image: url(../../../assets/imgs/product/2.3.0/warn.png);
+  background-repeat: no-repeat;
+  background-position: 24rpx center;
+  background-size: 32rpx 34rpx;
+  position: relative
+}
+
+#base-info .info-card .card-title::after {
+  content: "";
+  background-image: url(../../../assets/imgs/product/2.3.0/question-mark.png);
+  background-repeat: no-repeat;
+  width: 43rpx;
+  height: 43rpx;
+  background-size: cover;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 24rpx
+}
+
+#base-info .info-card .card-title .type-item {
+  font-size: 24rpx;
+  color: #333
+}
+
+#base-info .info-card .card-title .type-item+.type-item {
+  margin-left: 24rpx
+}
+
+#base-info .info-card .card-title .type-item .red-text {
+  display: inline-block;
+  margin-left: 9rpx;
+  margin-right: 6rpx;
+  color: #fc4d52
+}
+
+#base-info .info-card .card-content {
+  padding: 40rpx 24rpx
+}
+
+#base-info .price {
+  padding: 0 24rpx;
+  width: 100%;
+  display: flex
+}
+
+#base-info .price .left {
+  display: flex;
+  color: #333;
+  align-items: baseline;
+  font-size: 64rpx
+}
+
+#base-info .price .left .icon {
+  font-size: 36rpx;
+  margin-right: 4rpx;
+  display: inline-block
+}
+
+#base-info .price .left .unit {
+  font-size: 32rpx;
+  color: #999
+}
+
+#base-info .price .spec {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  background-image: url(../../../assets/imgs/product/2.3.0/spec.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: translateY(20rpx);
+  border-top-right-radius: 4rpx;
+  border-bottom-right-radius: 4rpx
+}
+
+#base-info .price .spec .company-coupon {
+  font-size: 20rpx;
+  color: #fff;
+  padding: 10rpx 8rpx 10rpx 20rpx
+}
+
+#base-info .price .right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center
+}
+
+#base-info .price .right a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 24rpx;
+  border: solid 2rpx #e0e0e0;
+  font-size: 24rpx;
+  color: #333;
+  padding: 12rpx 16rpx
+}
+
+#base-info .origin-price {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  padding-left: 45rpx;
+  color: #aaa
+}
+
+#base-info .origin-price span {
+  text-decoration: line-through
+}
+
+#base-info .rate-box {
+  padding: 0 24rpx 0 48rpx;
+  display: flex;
+  align-items: center;
+  margin-top: 30rpx;
+  padding-top: 40rpx;
+  border-top: 1px solid #f0f0f0
+}
+
+#base-info .rate-box .number-box {
+  flex: 1
+}
+
+#base-info .rate-box .number-box.star-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+}
+
+#base-info .rate-box .number-box .numnber {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600
+}
+
+#base-info .rate-box .number-box .title {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 20rpx
+}
+
+#base-info .rate-box .number-box .title.star-title {
+  display: flex;
+  align-items: center;
+  margin-top: 26rpx
+}
+
+#base-info .rate-box .number-box .title.star-title .icon-arrow_enter {
+  color: #f6f6f6;
+  font-weight: 800;
+  margin-left: 6rpx;
+  transform: translateY(2rpx)
+}
+
+#base-info .rate-box .number-box .title.star-title .icon-arrow_enter.go-icon {
+  font-size: 18rpx;
+  color: #d6d6d6
+}
+
+#base-info .procedure-box {
+  display: flex;
+  flex-direction: column;
+  background-color: snow;
+  border-radius: 16rpx;
+  border: solid 1rpx #e22d3a;
+  padding-top: 16rpx;
+  position: relative;
+  margin-top: 20rpx
+}
+
+#base-info .procedure-box .procedure-header {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 8rpx
+}
+
+#base-info .procedure-box .procedure-header .left-box {
+  width: 247rpx;
+  height: 56rpx;
+  background-image: url(../../../assets/imgs/product/2.3.0/procedure-header.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0 15rpx
+}
+
+#base-info .procedure-box .procedure-header .right-box {
+  width: 168rpx;
+  height: 56rpx;
+  background-image: url(../../../assets/imgs/product/2.3.0/more-view.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: -8rpx;
+  top: 16rpx;
+  font-size: 28rpx;
+  color: #fff;
+  padding-left: 15rpx;
+  padding-top: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+#base-info .procedure-box .procedure-header .right-box .right-icon {
+  width: 10rpx;
+  height: 18rpx;
+  background-size: cover;
+  background-repeat: no-repeat
+}
+
+#base-info .procedure-box .procedure-header .right-box .right-icon.more {
+  background-image: url(https://o.666visa.cn/static/pdvwxa/visa-detail/more-right-icon.png);
+  margin-left: 10rpx
+}
+
+#base-info .procedure-box .procedure-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 23rpx 22rpx 45rpx
+}
+
+#base-info .procedure-box .procedure-container .procedure-item {
+  width: 218rpx;
+  height: 123rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+}
+
+#base-info .procedure-box .procedure-container .procedure-item image {
+  margin: 40rpx auto 15rpx;
+  width: 60rpx;
+  height: 60rpx
+}
+
+#base-info .procedure-box .procedure-container .procedure-item .procedure-text {
+  font-size: 24rpx;
+  color: #666
+}
+
+.need-days-dialog .days {
+  font-size: 24rpx;
+  color: #6f6f6f
+}
+
+.need-days-dialog .days span {
+  font-size: 48rpx;
+  color: #e22d3a
+}
+
+.need-days-dialog .detail {
+  font-size: 28rpx;
+  line-height: 48rpx;
+  margin-top: 30rpx;
+  color: #aaa
+}
+
+.price-detail-dialog .price-detail-dialog .weui-dialog {
+  max-width: 80%
+}
+
+.price-detail-dialog .days {
+  font-size: 48rpx;
+  color: #ff4646
+}
+
+.price-detail-dialog .days span.origin {
+  font-size: 24rpx;
+  color: #6f6f6f;
+  text-decoration: line-through;
+  margin-left: 8rpx
+}
+
+.price-detail-dialog .detail {
+  font-size: 28rpx;
+  line-height: 48rpx;
+  margin-top: 30rpx;
+  color: #aaa
+}
+
+.service-dialog .dialog-content {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-bottom: 0
+}
+
+.service-dialog .dialog-content .serve-item {
+  display: flex;
+  margin-bottom: 50rpx
+}
+
+.service-dialog .dialog-content .serve-item .icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 30rpx;
+  transform: translateY(-6rpx)
+}
+
+.service-dialog .dialog-content .serve-item .content {
+  display: flex;
+  flex-direction: column;
+  max-width: 535rpx
+}
+
+.service-dialog .dialog-content .serve-item .content .title {
+  font-size: 32rpx;
+  color: #333;
+  text-align: left;
+  font-weight: 600;
+  margin-bottom: 20rpx
+}
+
+.service-dialog .dialog-content .serve-item .content .desc {
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: #666;
+  text-align: left
+}
+
+@media screen and (min-width:768px) {
+  .price-detail-dialog .weui-dialog {
+    width: 50%
+  }
+}

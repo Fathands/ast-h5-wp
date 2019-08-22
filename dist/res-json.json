@@ -1,4 +1,5 @@
 {
+  "component": true,
   "usingComponents": {
     "XDialog": "vux",
     "stars": "../../../components/Stars"

@@ -17,42 +17,43 @@ const { parseHtml } = require('./utils/parse-html')
 
 const babelrc = path.resolve('./.babelrc')
 
-fs.readFile('./target/target.vue', 'utf8', (err, vueFileContent) => {
-  const sfc = getSFCJson(vueFileContent)
+// 读取文件
+const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
 
-  const astTplRes = compileTpl(sfc.template.content).ast
-  const wxmlResult = parseHtml(astTplRes)
-  // fs.writeFileSync('./dist/res-html-ast.js', circularJSON.stringify(wxmlResult, null, 2));
-  fs.writeFileSync('./dist/res-html.wxml', wxmlResult);
+// 获取sfc结构
+const sfc = getSFCJson(vueFileContent)
 
-  // 生成js文件
-  const scriptContent = sfc.script.content
-  const babelOptions = { extends: babelrc, plugins: [{visitor: parseImportVisitor}, { visitor: parseExportDefaultVisitor }] }
-  const result = babel.transform(scriptContent, babelOptions)
-  fs.writeFileSync('./dist/res-js.js', result.code.trim());
-  
-  // 生成json文件
-  // const jsonFile = {
-  //   component: result.metadata.isComponent ? true : undefined,
-  //   usingComponents: result.metadata.usingComponents
-  // }
-  // fs.writeFileSync('./dist/res-json.json', circularJSON.stringify(jsonFile, null, 2));
+// 生成 wxml 文件
+const astTplRes = compileTpl(sfc.template.content).ast
+const wxmlResult = parseHtml(astTplRes)
+fs.writeFileSync('./dist/res-html.wxml', wxmlResult);
 
-  // // 处理less 生成 css 文件
-  // const stylesSting = sfc.styles.reduce((pre, cur) => {
-  //   return pre + cur.content.trim() + '\n'
-  // }, '')
-  // postcss([
-  //   less({ strictMath: true }),
-  //   rem2rpx({ rootFontSize: 50 }),
-  //   autoprefixer(), 
-  //   clean()
-  // ])
-  // .process(stylesSting, { parser: less.parser, from: 'res-styles-ast.less' })
-  // .then(function (result) {
-  //   fs.writeFileSync('./dist/res-style.wxss', result.css);
-  // }, function(err) {
-  //   console.log(err);
-  // });
+// 生成js文件
+const scriptContent = sfc.script.content
+const babelOptions = { extends: babelrc, plugins: [{visitor: parseImportVisitor}, { visitor: parseExportDefaultVisitor }] }
+const result = babel.transform(scriptContent, babelOptions)
+fs.writeFileSync('./dist/res-js.js', result.code.trim());
 
+// 生成json文件
+const jsonFile = {
+  component: result.metadata.isComponent ? true : undefined,
+  usingComponents: result.metadata.usingComponents
+}
+fs.writeFileSync('./dist/res-json.json', circularJSON.stringify(jsonFile, null, 2));
+
+// 处理less 生成 css 文件
+const stylesSting = sfc.styles.reduce((pre, cur) => {
+  return pre + cur.content.trim() + '\n'
+}, '')
+postcss([
+  less({ strictMath: true }),
+  rem2rpx({ rootFontSize: 50 }),
+  autoprefixer(), 
+  clean()
+])
+.process(stylesSting, { parser: less.parser, from: 'res-styles-ast.less' })
+.then(function (result) {
+  fs.writeFileSync('./dist/res-style.wxss', result.css);
+}, function(err) {
+  console.log(err);
 });

@@ -1,5 +1,5 @@
 <view id="base-info">
-<image class="back-icon" src="../../../assets/imgs/order/back.png" @change="goBack"></image>
+<image class="back-icon" src="../../../assets/imgs/order/back.png"></image>
 
 <view class="goods-info">
 <!-- 商品名称 -->
