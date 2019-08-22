@@ -1,28 +1,268 @@
 <view id="base-info">
-<image class="back-icon" src="../../../assets/imgs/order/back.png" @click="goBack"></image>
+<image class="back-icon" src="../../../assets/imgs/order/back.png" @change="goBack"></image>
 
-<view class="goods-info"></view>
+<view class="goods-info">
+<!-- 商品名称 -->
+
+<view class="product-name">
+{{product.country}} {{product.visa_type}}·{{product.product_name}}
+</view>
+
+<view class="tags-box">
+<view class="tag-item" wx:for="{{product.tag}}" wx:for-item="item" wx:for-index="index" key="{{index}}">
+{{item}}
+</view>
+</view>
+
+<view class="features">
+<!--  信息项  -->
+
+<view class="feature-item" wx:for="{{product.common_info}}" wx:for-item="item" key="{{item.title}}">
+<view class="item-title">
+{{item.title}}
+</view>
+
+<view >
+<template wx:if="{{item.type === 0}}">
+<view >
+{{item.num}}
+</view>
+
+<view >
+{{item.unit}}
+</view>
+</template>
+
+<view wx:else>
+{{item.unit}}
+</view>
+</view>
+</view>
+</view>
+
+<view class="info-card">
+<view class="card-title" bindtap="openDialog" data-needDays="needDays" data-true="true">
+<view class="type-item">
+
+          预计出签
+          
+
+<view class="red-text">
+{{product.earliest_depart_date}}
+</view>
+</view>
+
+<view class="type-item">
+
+          办理时长
+          
+
+<view wx:if="{{product.need_days !== product.need_days_longest}}" class="red-text">
+{{product.need_days}}-{{product.need_days_longest}}
+</view>
+
+<view wx:if="{{product.need_days === product.need_days_longest}}" class="red-text">
+{{product.need_days}}
+</view>
+
+
+          工作日
+        
+</view>
+</view>
+
+<view class="card-content">
+<!-- 价格 -->
+
+<view class="price">
+<view class="left">
+<view class="icon">
+￥
+</view>
+
+<view wx:if="{{product.company_coupon && product.company_coupon.coupon_desc}}">
+{{product.company_coupon.sell_price / 100}}
+</view>
+
+<view wx:elif="{{product.distributor_discount && product.distributor_discount.desc}}">
+{{product.distributor_discount.price / 100}}
+</view>
+
+<view wx:else>
+{{product.sell_price / 100}}
+</view>
+
+<view class="unit">
+/人
+</view>
+</view>
+
+<view class="spec">
+<view class="company-coupon" wx:if="{{product.company_coupon}}">
+{{product.company_coupon.coupon_desc}}
+</view>
+
+<view class="company-coupon" wx:if="{{product.distributor_discount}}">
+{{product.distributor_discount.desc}}
+</view>
+</view>
+
+<view class="right">
+<a bindtap="openDialog" data-priceDetail="priceDetail" data-true="true">
+价格明细
+</a>
+</view>
+</view>
+
+<!--  普通用户价格  -->
+
+<view class="origin-price" wx:if="{{product.company_coupon && product.company_coupon.coupon_desc || product.distributor_discount && product.distributor_discount.desc}}">
+<view >
+￥{{product.sell_price / 100}}
+</view>
+</view>
+
+<view class="rate-box">
+<view class="number-box">
+<view class="numnber">
+{{product.sales}}
+</view>
+
+<view class="title">
+已办理人数
+</view>
+</view>
+
+<view class="number-box">
+<view class="numnber">
+{{successRate}}%
+</view>
+
+<view class="title">
+综合出签率
+</view>
+</view>
+
+<view class="number-box star-box" bindtap="goReview">
+<stars score="{{score}}"></stars>
+
+<view class="title star-title">
+评价({{reviews}})
+
+<view class="iconfont icon-arrow_enter go-icon" wx:if="{{reviews}}"></view>
+</view>
+</view>
+</view>
+</view>
+</view>
+
+<view class="procedure-box">
+<view class="procedure-header">
+<view class="left-box"></view>
+
+<view class="right-box" bindtap="openDialog" data-service="service" data-true="true">
+
+          查看更多
+          
+
+<view class="right-icon more"></view>
+</view>
+</view>
+
+<view class="procedure-container" bindtap="openDialog" data-service="service" data-true="true">
+<view class="procedure-item" wx:for="{{procedureList}}" wx:for-item="item" wx:for-index="idx" key="{{idx}}">
+<image src="{{item.icon}}"></image>
+
+<view class="procedure-text">
+{{item.title}}
+</view>
+</view>
+</view>
+</view>
+</view>
 
 <!--  办理时长浮层 need-days-dialog 下面有用到 -->
 
-<x-dialog class="common-dialog need-days-dialog" v-model="popupSwitches.needDays"></x-dialog>
+<x-dialog class="common-dialog need-days-dialog" value="{{popupSwitches.needDays}}">
+<view class="dialog-header">
+办理时长
+</view>
+
+<view class="dialog-content">
+<view class="days">
+<view wx:if="{{product.need_days !== product.need_days_longest}}">
+{{product.need_days}}-{{product.need_days_longest}}
+</view>
+
+<view wx:if="{{product.need_days === product.need_days_longest}}">
+{{product.need_days}}
+</view>
+
+
+        工作日
+      
+</view>
+
+<view class="detail">
+{{product.need_days_detail}}
+</view>
+</view>
+
+<view class="dialog-close" bindtap="openDialog" data-needDays="needDays" data-false="false">
+知道了
+</view>
+</x-dialog>
 
 <!--  费用明细浮层 price-detail-dialog 下面有用到  -->
 
-<x-dialog class="common-dialog price-detail-dialog" v-model="popupSwitches.priceDetail"></x-dialog>
+<x-dialog class="common-dialog price-detail-dialog" value="{{popupSwitches.priceDetail}}">
+<view class="dialog-header">
+费用明细
+</view>
+
+<view class="dialog-content">
+<view class="days" wx:if="{{product.company_coupon && product.company_coupon.coupon_desc}}">
+￥{{product.company_coupon.sell_price / 100}}
+
+<view class="origin">
+￥{{product.sell_price / 100}}
+</view>
+</view>
+
+<view class="days" wx:elif="{{product.distributor_discount && product.distributor_discount.desc}}">
+￥{{product.distributor_discount.price / 100}}
+
+<view class="origin">
+￥{{product.sell_price / 100}}
+</view>
+</view>
+
+<view class="days" wx:else>
+￥{{product.sell_price / 100}}
+</view>
+
+<view class="detail">
+{{product.price_detail}}
+</view>
+</view>
+
+<view class="dialog-close" bindtap="openDialog" data-priceDetail="priceDetail" data-false="false">
+知道了
+</view>
+</x-dialog>
 
 <!--  服务特色  -->
 
-<x-dialog class="common-dialog service-dialog" v-model="popupSwitches.service">
+<x-dialog class="common-dialog service-dialog" value="{{popupSwitches.service}}">
 <view class="dialog-header">
 服务特色
 </view>
 
 <view class="dialog-content">
-<view class="serve-item" v-for="(item, idx) in procedureList" :key="idx">
-<image :src="item.icon" class="icon"></image>
+<view class="serve-item" wx:for="{{procedureList}}" wx:for-item="item" wx:for-index="idx" key="{{idx}}">
+<image src="{{item.icon}}" class="icon"></image>
 
-<view class="content" @click="goDesc(idx)">
+<view class="content" bindtap="goDesc" data-idx="idx">
 <view class="title">
 {{item.title}}
 </view>
@@ -34,7 +274,7 @@
 </view>
 </view>
 
-<view class="dialog-close" @click="openDialog('service', false)">
+<view class="dialog-close" bindtap="openDialog" data-service="service" data-false="false">
 知道了
 </view>
 </x-dialog>

@@ -26,13 +26,14 @@ fs.readFile('./target/target.vue', 'utf8', (err, vueFileContent) => {
   fs.writeFileSync('./dist/res-html.wxml', wxmlResult);
 
   // 生成js文件
-  // const scriptContent = sfc.script.content
-  // const babelOptions = { extends: babelrc, plugins: [{visitor: parseImportVisitor}, { visitor: parseExportDefaultVisitor }] }
-  // const result = babel.transform(scriptContent, babelOptions)
-  // fs.writeFileSync('./dist/res-js.js', result.code.trim());
+  const scriptContent = sfc.script.content
+  const babelOptions = { extends: babelrc, plugins: [{visitor: parseImportVisitor}, { visitor: parseExportDefaultVisitor }] }
+  const result = babel.transform(scriptContent, babelOptions)
+  fs.writeFileSync('./dist/res-js.js', result.code.trim());
   
   // 生成json文件
   // const jsonFile = {
+  //   component: result.metadata.isComponent ? true : undefined,
   //   usingComponents: result.metadata.usingComponents
   // }
   // fs.writeFileSync('./dist/res-json.json', circularJSON.stringify(jsonFile, null, 2));
