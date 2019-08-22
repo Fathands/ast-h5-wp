@@ -76,6 +76,9 @@ const generateStartTag = function (node) {
     case 'img':
       startTag = handleTag({ tag: 'image', attrsMap });
       break;
+    case 'template':
+      startTag = handleTag({ tag: 'block', attrsMap });
+      break;
     default:
       startTag = handleTag({ tag, attrsMap });
   }
@@ -98,6 +101,9 @@ const generateEndTag = function (node) {
       break;
     case 'img':
       endTag = '</image>'
+      break;
+    case 'template':
+      endTag = '</block>'
       break;
     default:
       endTag = `</${tag}>`
