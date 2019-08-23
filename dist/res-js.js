@@ -64,6 +64,13 @@ Component({
 
   attached() {
     this.init();
+    Watch(this, {
+      test(newVal, oldVal) {
+        if (newVal === 1) {
+          return 123;
+        }
+      }
+    })
   },
   ready() {
     this.ready('passport');
@@ -71,6 +78,7 @@ Component({
   detached() {
     this.detached();
   },
+
   methods: {
     parseInt,
     openDialog(switchName, open) {

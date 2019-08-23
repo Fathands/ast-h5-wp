@@ -84,6 +84,22 @@ const traverseJsVisitor = {
 
       path.replaceWith(newNode)
     }
+
+    if (path && path.node && path.node.key.name === 'created') {
+      const watchIndex = path.container.findIndex(item => item.key.name === 'watch')
+      const watchItemPath = path.getSibling(watchIndex)
+      if (watchItemPath) {
+        const { value } = watchItemPath.node
+        const arguments = [types.thisExpression(), value]
+        const callee = types.identifier('Watch')
+  
+        const newCallExpression = types.CallExpression(callee, arguments)
+        path.get('body').pushContainer('body', newCallExpression);
+        watchItemPath.remove()
+      }
+
+      return;
+    }
   },
   Identifier(path) {
     const { metadata } = path.hub.file

@@ -280,6 +280,13 @@ export default {
   destroyed() {
     this.destroyed()
   },
+  watch: {
+    test(newVal, oldVal) {
+      if (newVal === 1) {
+        return 123;
+      }
+    }
+  },
   methods: {
     parseInt,
     openDialog(switchName, open) {
