@@ -23,6 +23,8 @@ const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
 // 获取sfc结构
 const sfc = getSFCJson(vueFileContent)
 
+fs.writeFileSync('./dist/res.js', circularJSON.stringify(sfc, null, 2));
+
 // 生成 wxml 文件
 const astTplRes = compileTpl(sfc.template.content).ast
 const wxmlResult = parseHtml(astTplRes)
