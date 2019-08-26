@@ -21,3 +21,35 @@ const foo = (item) => item.id
 得到的<font color=#ff502c size=2>抽象语法树</font>如下图。
 这是在[AST Explorer](https://astexplorer.net/)转换得到的。
 
+![抽象语法树](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/ast-demo.png "抽象语法树")
+
+可以看到我们的js代码已经被转换成一个<font color=#ff502c size=2>json对象</font>，这个json对象的描述了这段代码。
+我们可以通过拿到这个json对象去进行树形遍历，从而把这一段js代码进行加工成一段我们想要的代码。比如可以把它转换成一段<font color=#ff502c size=2>ES5的代码</font>。
+
+这里就不描述具体步骤了，在后面的将<font color=#ff502c size=2>script中的内容 -> 小程序的js文件</font>中有具体描述。
+
+### vue-template-compiler
+
+另外还有一个需要了解的是<font color=#ff502c size=2>vue-template-compiler</font>。
+我们写的单个vue文件叫做<font color=#ff502c size=2>SFC(Single File Components)</font>。
+vue-template-compiler 就是解析SFC文件，提取每个语言块，将单个VUE文件的<font color=#ff502c size=2>template、script、styles</font>分别解析，得到一个json文件。
+
+具体步骤如下。
+
+```javascript
+const fs = require('fs');
+const compiler = require('vue-template-compiler')
+
+// 读取文件
+const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
+const sfc = compiler.parseComponent(content)
+
+```
+
+得到的sfc的json文件的结构如下：
+
+![SFC](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/ast-demo.png "SFC")
+
+可以看到单个的vue文件已经被解析成了三个部分，styles是一个数组是因为可以写多个style标签。
+我们拿到解析后的json文件之后，就可以正式开始了。
+
