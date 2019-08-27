@@ -13,7 +13,7 @@
     - [处理 methods](#处理-methods)
     - [将this.xxx 转换成 this.data.xxx, 将 this.xx = xx 转换成 this.setData](#将thisxxx-转换成-thisdataxxx-将-thisxx--xx-转换成-thissetdata)
     - [处理 props中的default；把 data 函数转换为 data 属性；处理watch](#处理-props中的default把-data-函数转换为-data-属性处理watch)
-    - [处理router跳转](#处理router跳转)
+    - [处理路由跳转](#处理路由跳转)
     - [转换结果](#转换结果)
   - [template -> wxml文件](#template---wxml文件)
     - [将 template 代码转换为 AST树](#将-template-代码转换为-ast树)
@@ -85,7 +85,7 @@ const sfc = compiler.parseComponent(vueFileContent)
 
 ![SFC](https://github.com/Fathands/ast-h5-wp/blob/master/assets/images/sfc.png?raw=true "SFC")
 
-可以看到单个的vue文件已经被解析成了三个部分，styles是一个数组是因为可以写多个style标签。
+可以看到单个的vue文件已经被解析成了三个部分，styles是一个数组，因为在vue文件中可以写多个style标签。
 我们拿到解析后的json文件之后，就可以正式开始了。
 <a name="style---wxss文件"></a>
 
@@ -134,9 +134,9 @@ postcss([
 
 这里有几个需要注意的点。
 
-1.由于styles是一个数组，postcss需要处理的是一个字符串，所以我们需要事先使用reduce把styles数组中的content合并成一个字符串。
+1.由于styles是一个数组，postcss需要处理的是<font color=#ff502c size=2>一个字符串</font>，所以我们需要事先使用reduce把styles数组中的content合并成一个字符串。
 
-2.在rem2rpx中，需要设置一个rootFontSize，这就需要根据自己的项目情况来。
+2.在rem2rpx中，需要设置一个<font color=#ff502c size=2>rootFontSize</font>，这就需要根据自己的项目情况来。
 
 3.如果style中有<font color=#ff502c size=2>@import "./assets/styles/mixin.less";</font>这样的import代码，则需要把这个文件copy到本地来。
 
@@ -150,9 +150,13 @@ postcss([
 
 在进行这个步骤之前，先得讲一个很重要的工具，就是<font color=#ff502c size=2> Babel</font>
 
-在将vue中的script部分转换成小程序需要的js文件过程中，最重要的就是Babel。比如需要把created方法转换为小程序的 onLoad 或者 组件中的 attached方法,
-我们需要使用Babel把script部分的代码解析成一个AST抽象语法树，再用Babel的api去转换和修改这颗抽象语法树，最后再生成所需要的代码。bable在这里就像一把带有魔法的手术刀，
-可以把现有代码转换成任意代码。这一点感觉和lisp的元编程有点像。
+在将vue中的script部分转换成小程序需要的js文件过程中，最重要的就是Babel。
+
+比如需要把created方法转换为小程序的 onLoad 或者 组件中的 attached方法,
+我们需要使用Babel把script部分的代码解析成一个AST抽象语法树，再用Babel的api去转换和修改这颗抽象语法树，最后再生成所需要的代码。
+
+bable在这里就像一把带有魔法的手术刀，
+可以把现有代码转换成任意代码。这一点有点lisp的感觉。
 
 总结一下 Babel 的三个主要步骤是：
 
@@ -162,7 +166,7 @@ postcss([
 
 2.转换(transform)
 
-遍历初始的 AST 抽象语法树，babel 中有个 babel-core，它向外暴露出 babel.transform 接口。
+遍历初始的 AST 抽象语法树，babel 中有个<font color=#ff502c size=2>babel-core</font> ，它向外暴露出 <font color=#ff502c size=2>babel.transform</font> 接口。
 
 3.生成(generate)
 
@@ -219,8 +223,9 @@ console.log(result.code.trim())
 首先来看一下vue文件中script的基本结构。
 ![script的基本结构](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script-demo.png "script的基本结构")
 
-可以看到在export default中有 directives 和 components两个属性与import导入的文件有关，小程序中，
-directives不需要，需要删除这个节点，同时也要删除import进来的这个文件；components也不需要，但是components
+可以看到在<font color=#ff502c size=2> export default </font>中有<font color=#ff502c size=2> directives </font>和<font color=#ff502c size=2> components </font>两个属性与import导入的文件有关
+
+小程序中，directives不需要，需要删除这个节点，同时也要删除import进来的这个文件；components也不需要，但是components
 中的文件需要放到小程序的json文件中的usingComponents中。
 
 所以下面先处理import部分：
@@ -343,22 +348,25 @@ const parseExportDefaultVisitor = {
 
 ```
 
-这里需要注意的点是，export default 如何替换成 Page 或者 Component，在traverseJsVisitor会判断当前文件是否是一个组件，
-然后把 isComponent保存到metadata中，在 ExportDefaultDeclaration 就可以取到 isComponent的值，从而决定是生成 Page还是Component。
+这里需要注意的点是，<font color=#ff502c size=2> export default </font> 如何替换成<font color=#ff502c size=2> Page </font>或者<font color=#ff502c size=2> Component </font>，在<font color=#ff502c size=2> traverseJsVisitor </font>会判断当前文件是否是一个组件，
+然后把<font color=#ff502c size=2>isComponent</font>保存到<font color=#ff502c size=2>metadata</font>中，在<font color=#ff502c size=2>ExportDefaultDeclaration</font>就可以取到 isComponent 的值，从而决定是生成 Page还是Component。
 
-而在小程序 Page({}) 或者 Component({}) 是一个 CallExpression， 所以需要构造一个 CallExpression 来替换掉 ExportDefaultDeclaration
+而在小程序<font color=#ff502c size=2> Page({}) </font> 或者<font color=#ff502c size=2>Component({})</font> 是一个<font color=#ff502c size=2>CallExpression</font>， 所以需要构造一个<font color=#ff502c size=2>CallExpression</font> 来替换掉<font color=#ff502c size=2>ExportDefaultDeclaration</font>
 <a name="处理props-created-mounted-destroyed"></a>
 
 ### 处理props, created, mounted, destroyed
 
-在traverseJsVisitor来处理props, created, mounted, destroyed
+在<font color=#ff502c size=2>traverseJsVisitor</font>来处理<font color=#ff502c size=2>props, created, mounted, destroyed</font>
 
-props => properties
-created => attached || onLoad
-mounted => ready || onReady
-destroyed => detached || onUnload
+<font color=#ff502c size=2>props => properties</font>
 
-这里只是做了一下简单映射，如果onShow或者active等其它生命周期或者其它属性需要映射的话，以后慢慢改进。
+<font color=#ff502c size=2>created => attached || onLoad</font>
+
+<font color=#ff502c size=2>mounted => ready || onReady</font>
+
+<font color=#ff502c size=2>destroyed => detached || onUnload</font>
+
+这里只是做了一下简单映射，如果<font color=#ff502c size=2>onShow</font>或者<font color=#ff502c size=2>active</font>等<font color=#ff502c size=2>其它生命周期</font>或者其它属性需要映射的话，以后慢慢改进。
 
 ```javascript
 // ......
@@ -435,7 +443,7 @@ const traverseJsVisitor = {
 
 ### 将this.xxx 转换成 this.data.xxx, 将 this.xx = xx 转换成 this.setData
 
-这里其实是留了坑的，因为如果有多个 this.xx = xx ，我这里并没有将他们合并到一个 this.setData中，留点坑，以后填...
+这里其实是留了坑的，因为如果有多个<font color=#ff502c size=2>this.xx = xx</font> ，我这里并没有将他们合并到一个<font color=#ff502c size=2>this.setData</font>中，留点坑，以后填...
 
 ```javascript
 // ......
@@ -526,9 +534,9 @@ const traverseJsVisitor = {
 }
 ```
 
-这里有一点需要注意的是watch的处理，因为小程序没有watch，所以我在小程序手写了一个简单watch
+这里有一点需要注意的是<font color=#ff502c size=2>watch</font>的处理，因为小程序没有<font color=#ff502c size=2>watch</font>，所以我在小程序手写了一个简单<font color=#ff502c size=2>watch</font>
 
-而且小程序中的watch需要放在 onLoad 或者 attached 生命周期中。
+而且小程序中的watch需要放在<font color=#ff502c size=2>onLoad</font> 或者<font color=#ff502c size=2>attached</font> 生命周期中。
 
 ```javascript
 // 以下两个函数实现watch 未实现deep功能
@@ -555,7 +563,9 @@ const defineProperty = (data, key, val, fn) => {
   });
 };
 ```
+
 所以只需要将vue中的watch转换为这样子的形式的写法就行了。比如：
+
 ```javascript
 watch: {
   test(newVal, oldVal) {
@@ -565,7 +575,9 @@ watch: {
   }
 },
 ```
+
 需要转换成
+
 ```javascript
 Watch(this, {
   test(newVal, oldVal) {
@@ -577,12 +589,14 @@ Watch(this, {
 ```
 <a name="处理router跳转"></a>
 
-### 处理router跳转
+### 处理路由跳转
 
-处理router跳转有点复杂，需要将 this.$router.push 或者 this.$router.replace 转换为 wx.navigateTo 或者 wx.redirectTo
+处理路由跳转有点复杂，需要将<font color=#ff502c size=2>this.\$router.push</font> 或者 <font color=#ff502c size=2>this.\$router.replace</font> 转换为 <font color=#ff502c size=2>wx.navigateTo</font> 或者 <font color=#ff502c size=2>wx.redirectTo</font>
 
-把 this.$router 的 params 参数和 query 参数合并到一起，并需要跳转的url合成一个字符串
-比如：
+把 <font color=#ff502c size=2>this.$router</font> 的 <font color=#ff502c size=2>params</font> 参数和 <font color=#ff502c size=2>query</font> 参数合并到一起
+
+并合成一个字符串url，比如：
+
 ```javascript
 this.$router.push({
   name: 'ProductList',
@@ -595,6 +609,7 @@ wx.navigateTo({
   url: `ProductList?countryId=${this.data.product.visa_country_id}`
 });
 ```
+
 下面是具体转换过程:
 
 ```javascript
@@ -685,7 +700,7 @@ const traverseJsVisitor = {
 ### 将 template 代码转换为 AST树
 接下来是 将 template 部分 转换为 wxml 文件。这里要先用 vue-template-compiler 的 compiler 将 template 代码转换为 AST树。
 
-然后再实现一个解析这个 AST树的函数 parseHtml
+然后再实现一个解析这个 AST树的函数 <font color=#ff502c size=2>parseHtml</font>
 
 ```javascript
 const compiler = require('vue-template-compiler')
@@ -804,6 +819,7 @@ const generateStartTag = function (node) {
   }
   return startTag
 }
+
 const handleTag = function ({
   attrsMap,
   tag
