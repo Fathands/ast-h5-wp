@@ -210,7 +210,7 @@ const traverseJsVisitor = {
 
         const templateElementItemList = expressionList.map((item, index) => {
           if (index === 0) {
-            return `routeName?${item.key.name}=`
+            return `${routeName}?${item.key.name}=`
           }
           return `&${item.key.name}=`
         })

@@ -96,7 +96,7 @@ Component({
     },
     goBack() {
       wx.redirectTo({
-        url: `routeName?countryId=${this.data.product.visa_country_id}`
+        url: `ProductList?countryId=${this.data.product.visa_country_id}`
       });
 
       this.setData({
@@ -112,7 +112,7 @@ Component({
     goReview() {
       if (this.data.reviews) {
         wx.navigateTo({
-          url: `routeName?productId=${this.data.productId}`
+          url: `Review?productId=${this.data.productId}`
         });
       }
     }
