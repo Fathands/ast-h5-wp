@@ -655,7 +655,7 @@ const wxmlResult = parseHtml(astTplRes)
 ```
 
 解析出来的 AST树的结果如下：
-![template AST树](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script2.png "template AST树")
+![template AST树](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/template1.png "template AST树")
 
 可以看出对我们有用的属性就几个
 
@@ -886,9 +886,9 @@ const createWxml = function(node) {
 转换完的格式还是需要自己调整一下。
 
 转换前的vue代码：
-![转换前的template代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script1.png "转换前的template代码")
+![转换前的template代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/template2.png "转换前的template代码")
 
 转换后的小程序代码：
-![转换后的小程序wxml代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script2.png "转换后的小程序wxml代码")
+![转换后的小程序wxml代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/template3.png "转换后的小程序wxml代码")
 
 
