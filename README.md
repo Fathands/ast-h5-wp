@@ -46,7 +46,7 @@ const compiler = require('vue-template-compiler')
 
 // 读取vue文件
 const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
-const sfc = compiler.parseComponent(content)
+const sfc = compiler.parseComponent(vueFileContent)
 
 ```
 
@@ -57,7 +57,7 @@ const sfc = compiler.parseComponent(content)
 可以看到单个的vue文件已经被解析成了三个部分，styles是一个数组是因为可以写多个style标签。
 我们拿到解析后的json文件之后，就可以正式开始了。
 
-## style -> wxss
+## style -> wxss文件
 
 首先从最简单的开始。将<font color=#ff502c size=2>styles部分</font>转换成<font color=#ff502c size=2>wxss文件</font>。
 
@@ -70,10 +70,16 @@ postcss已经有插件可以将less转换成css，rem转换成rpx。所以我们
 具体步骤如下：
 
 ```javascript
+const compiler = require('vue-template-compiler')
+
 const postcss = require('postcss');
 const less = require('postcss-less-engine');
 const clean = require('postcss-clean');
 const rem2rpx = require('postcss-rem2rpx');
+
+// 读取vue文件
+const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
+const sfc = compiler.parseComponent(vueFileContent)
 
 // 将styles数组中的content合并成一个字符串
 const stylesSting = sfc.styles.reduce((pre, cur) => {
@@ -104,7 +110,7 @@ postcss([
 
 4.这里安装的less包版本为<font color=#ff502c size=2>"less": "2.7.1"</font>，版本3以上好像<font color=#ff502c size=2>postcss-less-engine</font>好像会失效。
 
-## script -> js
+## script -> js文件
 ### babel
 
 在进行这个步骤之前，先得讲一个很重要的工具，就是<font color=#ff502c size=2> Babel</font>
@@ -185,8 +191,12 @@ directives不需要，需要删除这个节点，同时也要删除import进来�
 
 ```javascript
 // ......
+const compiler = require('vue-template-compiler')
 
 const babelrc = path.resolve('./.babelrc') //拿到本地的 babelrc 的配置
+
+const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
+const sfc = compiler.parseComponent(vueFileContent)
 
 const scriptContent = sfc.script.content // 拿到解析后的sfc中的script部分的源代码
 const babelOptions = { extends: babelrc, plugins: [{visitor: parseImportVisitor}] } // 配置一个 parseImportVisitor
@@ -613,4 +623,272 @@ const traverseJsVisitor = {
 ```
 ### 转换结果
 
-转换前：
+这里有一个例子。
+
+转换前的vue代码：
+![转换前的vue代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script1.png "转换前的vue代码")
+
+转换后的小程序代码：
+![转换后的小程序代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script2.png "转换后的小程序代码")
+
+## template -> wxml文件
+
+### 将 template 代码转换为 AST树
+接下来是 将 template 部分 转换为 wxml 文件。这里要先用 vue-template-compiler 的 compiler 将 template 代码转换为 AST树。
+
+然后再实现一个解析这个 AST树的函数 parseHtml
+
+```javascript
+const compiler = require('vue-template-compiler')
+// 读取vue文件
+const vueFileContent = fs.readFileSync('./target/target.vue', 'utf8');
+const sfc = compiler.parseComponent(vueFileContent)
+
+const astTplRes = compiler.compile(sfc.template.content, {
+  comments: true,
+  preserveWhitespace: false,
+  shouldDecodeNewlines: true
+}).ast
+
+const wxmlResult = parseHtml(astTplRes)
+
+```
+
+解析出来的 AST树的结果如下：
+![template AST树](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script2.png "template AST树")
+
+可以看出对我们有用的属性就几个
+
+* tag: 标签
+* type: 类型，1-标签；2-表达式节点(Mustache)；3-纯文本节点和comment节点
+* attrsMap: 标签上的属性集合
+* children: 元素的子元素，需要递归遍历处理
+
+还有一些特殊的属性
+
+* classBinding、styleBinding: 动态绑定的class、style
+* if、elseif、else: 条件语句中的条件
+* ifConditions: 条件语句的else、elseif的节点信息都放在ifConditions的block里了
+* isComment:是否是注释
+
+### 给AST树的每个节点加上开始标签和结束标签
+
+拿到这个结构之后要怎么转换呢。
+
+我的思路是，因为这是一个树形结构，所以可以采用深度优先遍历，广度优先遍历或者递归遍历。
+
+通过遍历给每一个节点加上一个开始标签 startTag，和一个 结束标签 endTag。这里采用递归遍历。
+
+代码如下：
+
+```javascript
+const parseHtml = function(tagsTree) {
+  return handleTagsTree(tagsTree)
+}
+```
+
+```javascript
+
+const handleTagsTree = function (topTreeNode) {
+
+  // 为每一个节点生成开始标签和结束标签
+  generateTag(topTreeNode)
+
+};
+
+// 递归生成 首尾标签
+const generateTag = function (node) {
+  let children = node.children
+  // 如果是if表达式 需要做如下处理
+  if (children && children.length) {
+    let ifChildren
+    const ifChild = children.find(subNode => subNode.ifConditions && subNode.ifConditions.length)
+    if (ifChild) {
+      const ifChildIndex = children.findIndex(subNode => subNode.ifConditions && subNode.ifConditions.length)
+      ifChildren = ifChild.ifConditions.map(item => item.block)
+      delete ifChild.ifConditions
+      children.splice(ifChildIndex, 1, ...ifChildren)
+    }
+    children.forEach(function (subNode) {
+      generateTag(subNode)
+    })
+  }
+  node.startTag = generateStartTag(node) // 生成开始标签
+  node.endTag = generateEndTag(node) //生成结束标签
+}
+```
+
+下面是生成开始标签的代码：
+
+```javascript
+
+const generateStartTag = function (node) {
+  let startTag
+  const { tag, attrsMap, type, isComment, text } = node
+  // 如果是注释
+  if (type === 3) {
+    startTag = isComment ? `<!-- ${text} -->` : text
+    return startTag;
+  }
+  // 如果是表达式节点
+  if (type === 2) {
+    startTag = text.trim()
+    return startTag;
+  }
+  switch (tag) {
+    case 'div':
+    case 'p':
+    case 'span':
+    case 'em':
+      startTag = handleTag({ tag: 'view', attrsMap });
+      break;
+    case 'img':
+      startTag = handleTag({ tag: 'image', attrsMap });
+      break;
+    case 'template':
+      startTag = handleTag({ tag: 'block', attrsMap });
+      break;
+    default:
+      startTag = handleTag({ tag, attrsMap });
+  }
+  return startTag
+}
+const handleTag = function ({
+  attrsMap,
+  tag
+}) {
+  let stringExpression = ''
+  if (attrsMap) {
+    stringExpression = handleAttrsMap(attrsMap)
+  }
+  return `<${tag} ${stringExpression}>`
+}
+
+
+// 这个函数是处理 AttrsMap，把 AttrsMap 的所有值 合并成一个字符串
+const handleAttrsMap = function(attrsMap) {
+  let stringExpression = ''
+  stringExpression = Object.entries(attrsMap).map(([key, value]) => {
+    // 替换 bind 的 :
+    if (key.charAt(0) === ':') {
+      return `${key.slice(1)}="{{${value}}}"`
+    }
+    // 统一做成 bindtap
+    if (key === '@click') {
+      const [ name, params ] = value.split('(')
+      let paramsList
+      let paramsString = ''
+      if (params) {
+        paramsList = params.slice(0, params.length - 1).replace(/\'|\"/g, '').split(',')
+        paramsString = paramsList.reduce((all, cur) => {
+          return `${all} data-${cur.trim()}="${cur.trim()}"`
+        }, '')
+      }
+      return `bindtap="${name}"${paramsString}`
+    }
+    if (key === 'v-model') {
+      return `value="{{${value}}}"`
+    }
+    if (key === 'v-if') {
+      return `wx:if="{{${value}}}"`
+    }
+    if (key === 'v-else-if') {
+      return `wx:elif="{{${value}}}"`
+    }
+    if (key === 'v-else') {
+      return `wx:else`
+    }
+    if (key === 'v-for') {
+      const [ params, list ] = value.split('in ')
+      
+      const paramsList = params.replace(/\(|\)/g, '').split(',')
+      const [item, index] = paramsList
+      const indexString = index ? ` wx:for-index="${index.trim()}"` : ''
+      return `wx:for="{{${list.trim()}}}" wx:for-item="${item.trim()}"${indexString}`
+    }
+    return `${key}="${value}"`
+  }).join(' ')
+  return stringExpression
+}
+
+```
+
+结束标签很简单。
+这里是生成结束标签的代码：
+
+```javascript
+
+const generateEndTag = function (node) {
+  let endTag
+  const { tag, attrsMap, type, isComment, text } = node
+  // 如果是表达式节点或者注释
+  if (type === 3 || type === 2) {
+    endTag = ''
+    return endTag;
+  }
+  switch (tag) {
+    case 'div':
+    case 'p':
+    case 'span':
+    case 'em':
+      endTag = '</view>'
+      break;
+    case 'img':
+      endTag = '</image>'
+      break;
+    case 'template':
+      endTag = '</block>'
+      break;
+    default:
+      endTag = `</${tag}>`
+  }
+  return endTag
+}
+
+```
+
+### 将开始标签和结束标签合并
+
+拿到开始标签和结束标签之后，接下来就是重组代码了。
+
+```javascript
+
+const handleTagsTree = function (topTreeNode) {
+
+  // 为每一个节点生成开始标签和结束标签
+  generateTag(topTreeNode)
+
+  return createWxml(topTreeNode)
+};
+
+```
+
+```javascript
+
+ // 递归生成 所需要的文本
+const createWxml = function(node) {
+  let templateString = '';
+  const { startTag, endTag, children } = node
+  let childrenString = ''
+  if (children && children.length) {
+    childrenString = children.reduce((allString, curentChild) => {
+      const curentChildString = createWxml(curentChild)
+      return `${allString}\n${curentChildString}\n`
+    }, '')
+  }
+  return `${startTag}${childrenString}${endTag}`
+}
+
+```
+
+### 转换结果
+
+转换完的格式还是需要自己调整一下。
+
+转换前的vue代码：
+![转换前的template代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script1.png "转换前的template代码")
+
+转换后的小程序代码：
+![转换后的小程序wxml代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script2.png "转换后的小程序wxml代码")
+
+
