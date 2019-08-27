@@ -1,3 +1,30 @@
+<!-- TOC -->
+
+- [探索-如何将单个vue文件转换为小程序所需的四个文件(wxml, wxss, json, js)](#探索-如何将单个vue文件转换为小程序所需的四个文件wxml-wxss-json-js)
+  - [预备知识](#预备知识)
+    - [AST](#ast)
+    - [vue-template-compiler](#vue-template-compiler)
+  - [style -> wxss文件](#style---wxss文件)
+  - [script -> js文件](#script---js文件)
+    - [babel](#babel)
+    - [处理import导入文件](#处理import导入文件)
+    - [处理ExportDefaultDeclaration](#处理exportdefaultdeclaration)
+    - [处理props, created, mounted, destroyed](#处理props-created-mounted-destroyed)
+    - [处理 methods](#处理-methods)
+    - [将this.xxx 转换成 this.data.xxx, 将 this.xx = xx 转换成 this.setData](#将thisxxx-转换成-thisdataxxx-将-thisxx--xx-转换成-thissetdata)
+    - [处理 props中的default；把 data 函数转换为 data 属性；处理watch](#处理-props中的default把-data-函数转换为-data-属性处理watch)
+    - [处理router跳转](#处理router跳转)
+    - [转换结果](#转换结果)
+  - [template -> wxml文件](#template---wxml文件)
+    - [将 template 代码转换为 AST树](#将-template-代码转换为-ast树)
+    - [给AST树的每个节点加上开始标签和结束标签](#给ast树的每个节点加上开始标签和结束标签)
+    - [将开始标签和结束标签合并](#将开始标签和结束标签合并)
+    - [转换结果](#转换结果-1)
+  - [总结](#总结)
+
+<!-- /TOC -->
+<a name="探索-如何将单个vue文件转换为小程序所需的四个文件wxml-wxss-json-js"></a>
+
 # 探索-如何将单个vue文件转换为小程序所需的四个文件(wxml, wxss, json, js)
 
 最近在做需求的时候，经常是，同一个需求是在h5端实现一次，再在小程序实现一次，公司的h5端是用vue写的，微信小程序则是小程序的原生语言，这就导致了很多很重复的劳动，虽然语言不同，但逻辑和设计都是一模一样的。
@@ -7,8 +34,11 @@
 于是就有了这个想法，把所需要<font color=#ff502c size=2>单个vue文件</font>的转换为<font color=#ff502c size=2>小程序</font>原生语言所需要的四个文件<font color=#ff502c size=2>(wxml, wxss, json, js)</font>
 
 有点长，需要耐心读一下。
+<a name="预备知识"></a>
 
 ## 预备知识
+<a name="ast"></a>
+
 ### AST
 
 在开始之前，需要了解一点<font color=#ff502c size=2>AST(抽象语法树)</font>的相关知识。
@@ -31,6 +61,7 @@ const foo = (item) => item.id
 这里就不描述具体步骤了，在后面的将<font color=#ff502c size=2>script -> js</font>中有具体描述。
 
 这是js的部分。而在vue中，也是将template中的代码转换成了AST结构的json文件。后面我们需要使用到的postcss也是把less或者css文件转换成一个AST结构的json文件，然后再加工，输出成所需要的文件。
+<a name="vue-template-compiler"></a>
 
 ### vue-template-compiler
 
@@ -56,6 +87,7 @@ const sfc = compiler.parseComponent(vueFileContent)
 
 可以看到单个的vue文件已经被解析成了三个部分，styles是一个数组是因为可以写多个style标签。
 我们拿到解析后的json文件之后，就可以正式开始了。
+<a name="style---wxss文件"></a>
 
 ## style -> wxss文件
 
@@ -109,8 +141,11 @@ postcss([
 3.如果style中有<font color=#ff502c size=2>@import "./assets/styles/mixin.less";</font>这样的import代码，则需要把这个文件copy到本地来。
 
 4.这里安装的less包版本为<font color=#ff502c size=2>"less": "2.7.1"</font>，版本3以上好像<font color=#ff502c size=2>postcss-less-engine</font>好像会失效。
+<a name="script---js文件"></a>
 
 ## script -> js文件
+<a name="babel"></a>
+
 ### babel
 
 在进行这个步骤之前，先得讲一个很重要的工具，就是<font color=#ff502c size=2> Babel</font>
@@ -175,6 +210,7 @@ console.log(result.code.trim())
 [Babel 插件手册](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/plugin-handbook.md)
 
 [babel-types的使用手册](https://babeljs.io/docs/en/babel-types)
+<a name="处理import导入文件"></a>
 
 ### 处理import导入文件
 
@@ -270,6 +306,8 @@ const jsonFile = {
 }
 fs.writeFileSync('./dist/res-json.json', circularJSON.stringify(jsonFile, null, 2)); // 写到 json 文件中
 ```
+<a name="处理exportdefaultdeclaration"></a>
+
 ### 处理ExportDefaultDeclaration
 
 接下来处理 export default 中的代码。所以需要加一个 visitor
@@ -309,6 +347,7 @@ const parseExportDefaultVisitor = {
 然后把 isComponent保存到metadata中，在 ExportDefaultDeclaration 就可以取到 isComponent的值，从而决定是生成 Page还是Component。
 
 而在小程序 Page({}) 或者 Component({}) 是一个 CallExpression， 所以需要构造一个 CallExpression 来替换掉 ExportDefaultDeclaration
+<a name="处理props-created-mounted-destroyed"></a>
 
 ### 处理props, created, mounted, destroyed
 
@@ -365,6 +404,8 @@ const traverseJsVisitor = {
   },
 }
 ```
+<a name="处理-methods"></a>
+
 ### 处理 methods
 
 往 traverseJsVisitor 中 再加入一个 ObjectProperty的拦截器，因为小程序中，组件文件的方法都是写在 methods 属性中，
@@ -390,6 +431,7 @@ const traverseJsVisitor = {
   },
 }
 ```
+<a name="将thisxxx-转换成-thisdataxxx-将-thisxx--xx-转换成-thissetdata"></a>
 
 ### 将this.xxx 转换成 this.data.xxx, 将 this.xx = xx 转换成 this.setData
 
@@ -437,6 +479,7 @@ const traverseJsVisitor = {
   },
 }
 ```
+<a name="处理-props中的default把-data-函数转换为-data-属性处理watch"></a>
 
 ### 处理 props中的default；把 data 函数转换为 data 属性；处理watch
 
@@ -532,6 +575,7 @@ Watch(this, {
   }
 })
 ```
+<a name="处理router跳转"></a>
 
 ### 处理router跳转
 
@@ -621,6 +665,8 @@ const traverseJsVisitor = {
   }
 }
 ```
+<a name="转换结果"></a>
+
 ### 转换结果
 
 这里有一个例子。
@@ -630,8 +676,11 @@ const traverseJsVisitor = {
 
 转换后的小程序代码：
 ![转换后的小程序代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/script2.png "转换后的小程序代码")
+<a name="template---wxml文件"></a>
 
 ## template -> wxml文件
+
+<a name="将-template-代码转换为-ast树"></a>
 
 ### 将 template 代码转换为 AST树
 接下来是 将 template 部分 转换为 wxml 文件。这里要先用 vue-template-compiler 的 compiler 将 template 代码转换为 AST树。
@@ -670,6 +719,8 @@ const wxmlResult = parseHtml(astTplRes)
 * if、elseif、else: 条件语句中的条件
 * ifConditions: 条件语句的else、elseif的节点信息都放在ifConditions的block里了
 * isComment:是否是注释
+
+<a name="给ast树的每个节点加上开始标签和结束标签"></a>
 
 ### 给AST树的每个节点加上开始标签和结束标签
 
@@ -847,6 +898,8 @@ const generateEndTag = function (node) {
 
 ```
 
+<a name="将开始标签和结束标签合并"></a>
+
 ### 将开始标签和结束标签合并
 
 拿到开始标签和结束标签之后，接下来就是重组代码了。
@@ -881,6 +934,8 @@ const createWxml = function(node) {
 
 ```
 
+<a name="转换结果-1"></a>
+
 ### 转换结果
 
 转换完的格式还是需要自己调整一下。
@@ -891,4 +946,11 @@ const createWxml = function(node) {
 转换后的小程序代码：
 ![转换后的小程序wxml代码](https://raw.githubusercontent.com/Fathands/ast-h5-wp/master/assets/images/template3.png "转换后的小程序wxml代码")
 
+<a name="总结"></a>
 
+## 总结
+
+留下的坑其实还蛮多，做这个也是想偷点懒，有什么可以一起交流。
+
+完整代码在
+[ast-h5-wp](https://github.com/Fathands/ast-h5-wp)
