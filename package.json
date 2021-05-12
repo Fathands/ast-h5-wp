@@ -23,7 +23,7 @@
     "babelon": "^1.0.5",
     "circular-json": "^0.5.9",
     "less": "2.7.1",
-    "postcss": "^7.0.17",
+    "postcss": "^8.2.10",
     "postcss-clean": "^1.1.0",
     "postcss-less-engine": "^0.6.2",
     "postcss-rem2rpx": "^1.0.1",
